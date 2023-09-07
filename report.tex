@@ -1,0 +1,150 @@
+\documentclass{article}
+
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+
+\usepackage{graphicx}
+
+\usepackage[usenames]{color}
+\usepackage{hyperref}
+  \hypersetup{
+    colorlinks = true,
+    urlcolor = blue,       % color of external links using \href
+    linkcolor= blue,       % color of internal links 
+    citecolor= blue,       % color of links to bibliography
+    filecolor= blue,        % color of file links
+    }
+    
+\usepackage{listings}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=haskell,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\theoremstyle{theorem} 
+   \newtheorem{theorem}{Theorem}[section]
+   \newtheorem{corollary}[theorem]{Corollary}
+   \newtheorem{lemma}[theorem]{Lemma}
+   \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+   \newtheorem{definition}[theorem]{Definition}
+   \newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}    
+  \newtheorem{remark}[theorem]{Remark}
+
+
+\title{Programming Languages Report}
+\author{Evelyn Lawrie\\ Chapman University}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report is composed of weekly homework assignments for the Programming Languages course at Chapman University. First, an introduction describes the objectives and contents of this report. Then, further sections explore each assigned problem, week by week. The report ends in a conclusion that summarizes the goals of this project and the larger context it belongs to. 
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}\label{intro}
+
+This report's goal is to encourage problem solving and original thinking through the implementation of several self-contained weekly homework assignments. The task entails implementing a solution to each problem in a programming language of choice and then working out a given example of the algorithm's logic. By thinking through and thoroughly understanding each step of the algorithm, a deeper understanding of the logic behind why algorithms work the way that they do is cultivated. 
+
+\section{Week 1}
+
+Week 1's task is implementing the GCD (greatest common divisor) algorithm. 
+
+\subsection{GCD Introduction}
+
+The greatest common divisor algorithm can be understood from a geometric, algebraic, and programming perspective. The basis of this algorithm is the idea that whatever divides two numbers n and m where n \textgreater \text{} m must also divide n - m. This can be explored geometrically by visualizing small rectangles dividing up bigger rectangles until there is no smaller common divisor that will evenly fit in rectangles. This algorithm is also referred to as Euclid's algorithm, stemming from the Greek mathematician known as the ``father of geometry" \cite{Gcd}.
+
+When exploring how algebra can solve the greatest common divisor problem, this entails breaking up the problem into three cases: 
+
+\begin{itemize}
+\item n \textgreater \text{} m
+\item n \textless \text{} m
+\item n = m
+\end{itemize}
+
+Here is the algebraic definition of Euclid's algorithm using the three cases as described above \cite{Ltx}: 
+
+\begin{equation}
+gcd (n, m) = 
+\left\{
+    \begin{array}{lr}
+        gcd(m, m - n), & \text{if } n \text{ } \textgreater \text{ } m\\
+        gcd(n, n - m), & \text{if } n \text{ } \textless \text{ } m\\
+        n, & \text{if } n = m
+    \end{array}
+\right\}
+\end{equation}
+
+\subsection{GCD Code}
+
+Below is a recursive implementation of the GCD function in Java. 
+
+\begin{lstlisting}
+// recursive function to implement the greatest common divisor of two integers
+int gcdCalc(int n, int m) {
+        if (n > m) {
+            return gcdCalc(m, n - m); // subtract m from n when n is bigger 
+        }
+        else if (n < m) {
+            return gcdCalc(n, m - n); // subtract n from m when m is bigger
+        }
+        else {
+            return n; // return n when m and n are equal 
+        }
+    }
+\end{lstlisting}
+
+\subsection{Example Logic}
+
+Below is an implementation of the greatest common divisor algorithm using the example numbers 9 and 33:
+
+\begin{align}
+gcd(9, 33) & = gcd(9, 33-9)\\
+& = gcd(9, 24)\\
+& = gcd(9, 24-9)\\
+& = gcd(9, 15)\\
+& = gcd(9, 15-9)\\
+& = gcd(9, 6)\\
+& = gcd(9-6, 6)\\
+& = gcd(3, 6)\\
+& = gcd(3, 6-3)\\
+& = gcd(3, 3)\\
+& = 3
+\end{align}
+
+\section{Conclusion}\label{conclusions}
+
+This report details various logical problems and their solutions implemented throughout this semester. As illustrated in this report, these algorithms can be approached in various different ways. Exploring different approaches to the same problem hones the skill set of novel solution creation, which allows programmers to complete tasks by thinking outside of the box in ways that seem less than straightforward. The thought processes behind the solutions to these problems can be applied to technical interviews, future computer science courses, and projects assigned in the workplace within the field of computer programming. The problem-solving techniques developed in this class and through this report serve as a basis of knowledge to assist students with our future endeavours. 
+
+\begin{thebibliography}{99}
+\bibitem[LTX]{Ltx} \href{https://latex-tutorial.com/piecewise-functions-latex/}{Cases and piecewise functions in LaTex}, LaTex-Tutorial.com, 2023.
+\bibitem[GCD]{Gcd} Alexander Kurz, \href{https://www.youtube.com/watch?v=ZcJMj0antos}{gcd and Euclid's algorithm}, YouTube, 2020.
+\end{thebibliography}
+
+\end{document}
