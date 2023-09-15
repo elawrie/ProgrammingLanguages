@@ -74,8 +74,6 @@ This report's goal is to encourage problem solving and original thinking through
 
 \section{Week 1}
 
-Week 1's task is implementing the GCD (greatest common divisor) algorithm. 
-
 \subsection{GCD Introduction}
 
 The greatest common divisor algorithm can be understood from a geometric, algebraic, and programming perspective. The basis of this algorithm is the idea that whatever divides two numbers n and m where n \textgreater \text{} m must also divide n - m. This can be explored geometrically by visualizing small rectangles dividing up bigger rectangles until there is no smaller common divisor that will evenly fit in rectangles. This algorithm is also referred to as Euclid's algorithm, stemming from the Greek mathematician known as the ``father of geometry" \cite{Gcd}.
@@ -120,7 +118,7 @@ int gcdCalc(int n, int m) {
     }
 \end{lstlisting}
 
-\subsection{Example Logic}
+\subsection{Example Computation}
 
 Below is an implementation of the greatest common divisor algorithm using the example numbers 9 and 33:
 
@@ -138,11 +136,132 @@ gcd(9, 33) & = gcd(9, 33-9)\\
 & = 3
 \end{align}
 
+\section{Week 2}
+
+\subsection{Towers of Hanoi Introduction}
+
+Towers of Hanoi is a mathematical game in which disks are stacked in ascending order on the far left of three rods. The aim of this puzzle is to move these disks to the far right rod. For each move of one rod at a time, the rule must be obeyed that no disk can be placed onto a disk that is smaller than itself \cite{Wik}. The minimal number of moves required to find a solution given n number of disks is $2^n - 1$ \cite{Wik}.
+
+In the calculation below, \textit{hanoi n x y} is describing a function call to move n disks from rod x to rod y. The far right rod is denoted with a 0, the middle as 1, and the right with a 2. This problem can be approached through recursion, with the function defined as: 
+
+\begin{align}
+hanoi \text{ }1 \text{ }x \text{ }y &=  move \text{ }x \text{ }y
+\end{align}
+\begin{align}
+hanoi (n + 1) \text{ }x \text{ }y &=
+hanoi \text{ }n \text{ }x \text{ }(other \text{ }x \text{ }y)\\
+& move \text{ }x \text{ }y\\
+& hanoi \text{ }n \text{ }(other \text{ }x \text{ }y) \text{ }y
+\end{align}
+
+The function \textit{move x y} is a function that takes the top disk from position x and moves it to position y. The term \textit{other x y} is the third rod, neither x nor y.
+
+\subsection{Example Computation}
+
+Below are the calculations of the hanoi function with the example of 5 rings moving from left to right: 
+
+\begin{lstlisting}
+hanoi 5 0 2  
+    hanoi 4 0 1 
+        hanoi 3 0 2
+            hanoi 2 0 1 
+                hanoi 1 0 2 = move 0 2 
+                move  0 1
+                hanoi 1 2 1 = move 2 1
+            move 0 2  
+            hanoi 2 1 2
+            hanoi 1 1 0 = move 1 0  
+                move  1 2  
+                hanoi 1 0 2 = move 0 2
+        move 0 1
+        hanoi 3 2 1
+            hanoi 2 2 0 
+                hanoi 1 2 1 = move 2 1
+                move 2 0
+                hanoi 1 1 0 = move 1 0
+            move 2 1 
+            hanoi 2 0 1 
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 2 1 = move 2 1 
+    move 0 2 
+    hanoi 4 1 2 
+        hanoi 3 1 0
+            hanoi 2 1 2 
+                hanoi 1 1 0 = move 1 0
+                move 1 2
+                hanoi 1 0 2 = move 0 2 
+            move 1 0
+            hanoi 2 2 0
+                hanoi 1 2 1 = move 2 1
+                move 2 0
+                hanoi 1 1 0 = move 1 0
+        move 1 2
+        hanoi 3 0 2 
+            hanoi 2 0 1
+                hanoi 1 0 2 = move 0 2
+                move 0 1
+                hanoi 1 2 1 = move 2 1
+            move 0 2
+            hanoi 2 1 2
+                hanoi 1 1 0 = move 1 0
+                move 1 2
+                hanoi 1 0 2 = move 0 2
+\end{lstlisting}
+
+Here are the 31 moves present in the above calculation:
+
+\begin{enumerate}
+  \centering
+  \item move 0 2
+  \item move 0 1
+  \item move 2 1
+  \item move 0 2
+  \item move 1 0
+  \item move 1 2
+  \item move 0 2
+  \item move 0 1
+  \item move 2 1
+  \item move 2 0
+  \item move 1 0
+  \item move 2 1
+  \item move 0 2
+  \item move 0 1
+  \item move 2 1
+  \item move 0 2
+  \item move 1 0
+  \item move 1 2
+  \item move 0 2
+  \item move 1 0
+  \item move 2 1
+  \item move 2 0
+  \item move 1 0
+  \item move 1 2
+  \item move 0 2
+  \item move 0 1
+  \item move 2 1
+  \item move 0 2
+  \item move 1 0
+  \item move 1 2
+  \item move 0 2
+\end{enumerate}
+
+\subsection{Towers of Hanoi Formula}
+
+The word \textit{hanoi} appears 31 times in the computation above. This is the same frequency as the number of moves per n amount of disks. Therefore, the formula for amount of function calls necessary for the computation of a given number of disks is: 
+
+
+\begin{align}
+numFunctionCalls(numDisks) = numMoves(numDisks) = 2^{numDisks} - 1
+\end{align}
+
 \section{Lessons from the Project}
 
 Recursion is the basis for many of these weekly projects. Understanding in detail how recursion works behind the scenes aids in the implementation of the coded solutions in this report. Recursion is a problem-solving technique that utilizes the call stack to create functions that call other functions, or more simplified versions of themselves, within them. To visualize and fully understand the structure of recursive calls, it is best to draw out the problem as a tree data structure, with each recursive call being a node of the tree. Every time a base case is reached, that node becomes a leaf and then the branches are explored upwards from there, branching off when needed and computing calculations from the bottom up. This is describing depth-first search, in which one branch of the tree is explored all the way until reaching a base case. This process is repeated for the whole tree, usually starting at the left and moving right. Parsing, rewriting strings into trees, is a method of visualizing how a computer executes a certain computation and can be vital in the comprehension of the recursion problems explored in this report. 
 
 Another key takeaway that improves upon the concept of recursion is memoization. This deals with the repeated nodes or function calls within a function's tree. With simple recursion, it is common for the same calculation to be computed multiple times, which decreases efficiency of the code. This creates exponential run times which can prove highly costly for large computations. The process of memoization stores values that the function has already computed in a hash table or similar data structure for easy lookup and avoidance of unnecessary repeated calculations. The recursive function call then implements a quick lookup in this data structure (constant runtime) and extracts the output if the current input value has already been calculated. If the current parameter has not been calculated, it performs the regular calculations and then stores the new value inside of the memo object. The process of memoization greatly decreases the time complexity of recursive functions, in the majority of cases bringing it down from an exponential to a polynomial or linear type runtime. This problem-solving technique stood out to me as a highly important lecture topic that serves as a way to optimize the algorithms presented in this report.
+
+From Week 2's addition to this report, the syntax that displays the example computation is designed to illustrate how the stack grows and shrinks with recursive function calls. The stack grows from left to right until a base case is reached, shrinking from there going right to left. Working through this example thoughtfully can aide in the understanding of how recursive functions are interacted with on the stack. We are able to visualize through the Towers of Hanoi problem what the call stack looks like behind the scenes and why recursive functions work the way that they do. Recursion is the basis for many of the computations explored throughout this course, making a thorough understanding of its implementation crucial in fully absorbing its key takeaways. 
 
 \section{Conclusion}\label{conclusions}
 
@@ -151,6 +270,7 @@ This report details various logical problems and their solutions implemented thr
 \begin{thebibliography}{99}
 \bibitem[LTX]{Ltx} \href{https://latex-tutorial.com/piecewise-functions-latex/}{Cases and piecewise functions in LaTex}, LaTex-Tutorial.com, 2023.
 \bibitem[GCD]{Gcd} Alexander Kurz, \href{https://www.youtube.com/watch?v=ZcJMj0antos}{gcd and Euclid's algorithm}, YouTube, 2020.
+\bibitem[WIK]{Wik} \href{https://en.wikipedia.org/wiki/Tower_of_Hanoi}{Tower of Hanoi}, Wikipedia, 2023.
 \end{thebibliography}
 
 \end{document}
