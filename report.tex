@@ -363,6 +363,95 @@ We are tasked with writing out the abstract syntax trees for the example arithme
 
 Since parenthesis are not taken into account when writing out the nodes of abstract syntax trees, the tree for the equation $1+2*3$ is identical to the one for the equation $1+(2*3)$. The first equation follows the order of operations, in which multiplication is evaluated before addition. The second tree puts parenthesis around the multiplication terms, which visually illustrates which part of the equation to evaluate first, even though the equation is evaluated the same without the parenthesis given the order of operations. $(1+2)*3$ manipulates the order of operations, causing the addition to be evaluated first and therefore diverging from the calculation of the first equation without any parenthesis. 
 
+\section{Week 4}
+
+\subsection{Lambda Calculus Introduction}
+
+Lambda calculus only has three programming constructs. These are abstraction, application, and variables. According to abstraction, a program called $e$ containing the variable $x$ will look like $\lambda x. e$ in Lambda calculus. Application outlines how if $e1$ and $e2$ are programs, $e1 e2$  is the program that applies the function $e1$ to argument $e2$. Finally, the most basic programs in Lambda calculus only consist of variables. Lambda calculus abstracts away a lot of the syntax used in most other programming languages. The report this week focuses on the syntax and semantics of Lambda calculus.
+
+\subsection{Syntax}
+
+For the syntax portion of this week's homework, we are tasked with using the grammar of BNFC outlined for Lambda calculus to output the linearized abstract syntax trees from the following expressions, as well as manually write out the abstract syntax trees for them. Below are the calculations for the given Lambda calculus expressions: 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/aAST.png}
+\\
+\includegraphics[scale=0.4]{img/ASTa.png}
+\end{center}
+\caption{x}\label{ASTa}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/bAST.png}
+\\
+\includegraphics[scale=0.4]{img/ASTb.png}
+\end{center}
+\caption{x x}\label{ASTb}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/cAST.png}
+\\
+\includegraphics[scale=0.4]{img/ASTc.png}
+\end{center}
+\caption{x y}\label{ASTc}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/dAST.png}
+\includegraphics[scale=0.4]{img/ASTd.png}
+\end{center}
+\caption{x y z}\label{ASTd}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/eAST.png}
+\\
+\includegraphics[scale=0.4]{img/ASTe.png}
+\end{center}
+\caption{$\lambda x. x$}\label{ASTe}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/fAST.png}
+\includegraphics[scale=0.4]{img/ASTf.png}
+\end{center}
+\caption{$\lambda x. x x$}\label{ASTf}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/gAST.png}
+\includegraphics[scale=0.4]{img/ASTg.png}
+\end{center}
+\caption{$(\lambda x. (\lambda y. x y)) (\lambda x. x) z$}\label{ASTg}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{img/hAST.png}
+\includegraphics[scale=0.4]{img/ASTh.png}
+\end{center}
+\caption{$(\lambda x. \lambda y. x y z) a b c$}\label{ASTh}
+\end{figure}
+
+\subsection{Semantics}
+
+The Lambda calculus semantics homework entails finishing the workout that we started in class. Below is an image of my typed out computation: 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{img/workoutSolution.png}
+\end{center}
+\caption{Workout Solution}\label{WS}
+\end{figure}
+
 \section{Lessons from the Project}
 
 Recursion is the basis for many of these weekly projects. Understanding in detail how recursion works behind the scenes aids in the implementation of the coded solutions in this report. Recursion is a problem-solving technique that utilizes the call stack to create functions that call other functions, or more simplified versions of themselves, within them. To visualize and fully understand the structure of recursive calls, it is best to draw out the problem as a tree data structure, with each recursive call being a node of the tree. Every time a base case is reached, that node becomes a leaf and then the branches are explored upwards from there, branching off when needed and computing calculations from the bottom up. This is describing depth-first search, in which one branch of the tree is explored all the way until reaching a base case. This process is repeated for the whole tree, usually starting at the left and moving right. Parsing, rewriting strings into trees, is a method of visualizing how a computer executes a certain computation and can be vital in the comprehension of the recursion problems explored in this report. 
@@ -372,6 +461,8 @@ Another key takeaway that improves upon the concept of recursion is memoization.
 From Week 2's addition to this report, the syntax that displays the example computation is designed to illustrate how the stack grows and shrinks with recursive function calls. The stack grows from left to right until a base case is reached, shrinking from there going right to left. Working through this example thoughtfully can aide in the understanding of how recursive functions are interacted with on the stack. We are able to visualize through the Towers of Hanoi problem what the call stack looks like behind the scenes and why recursive functions work the way that they do. Recursion is the basis for many of the computations explored throughout this course, making a thorough understanding of its implementation crucial in fully absorbing its key takeaways. 
 
 Additionally, parsing is an important topic in this class, as it is an essential process that machines employ when evaluating most computer code. Computers parse concrete syntax into abstract syntax, which is then evaluated by the virtual machine, using the model of computation. This process is something we will encounter daily as computer programmers. Better understanding how a computer parses and understands the information we give it can make us more efficient programmers. Being able to decipher parse trees given a context-free grammar and examples of its language allows us to better understand how computers process code. BNFC and other types of parser generators define rules that the computer follows when interpreting concrete syntax strings. Approaching computer programs in terms of language and grammar teaches us to interpret programs logically and think of parsing as something that follows strict rules and does not take semantics into account. The way humans read and interpret programs is very different from how computers parse them, and we as programmers have to keep in mind that what the computer sees is taken at face value and evaluated according to the rules we have defined. This teaches us to be explicit and straightforward with how we program, avoiding ambiguity and confusion.
+
+Week 4 gives us an introduction to Lambda calculus and its applications. Lambda calculus is the simplest possible programming language. The syntax may look very different to most programming languages, but it contains all of the same concepts. This allows us to strip back a lot of the syntax and get to the root of the basis of programming languages. To be able to write programs using only variables, abstraction, and application is a good starting point to understand the logic of why computer programs work the way that they do. Using variable binding and substitution for Lambda calculus computations (using the Alpha and Beta rules) teaches us how to rename formal parameters and perform capture avoiding substitution, which are the building blocks of Lambda calculus. In capture avoiding substitution, we rename the formal parameters (bound variables) and then replace that parameter in the body of the function by the argument. Reducing Lambda calculus expressions according to these rules demonstrates how this logic is computed by the machine in its simplification. We are able to better understand how computers interpret code by working step-by-step through these computations and having a foundational understanding of Lambda calculus as a whole. 
 
 \section{Conclusion}\label{conclusions}
 
