@@ -452,6 +452,105 @@ The Lambda calculus semantics homework entails finishing the workout that we sta
 \caption{Workout Solution}\label{WS}
 \end{figure}
 
+\section{Week 5}
+
+\subsection{Variables, Binding, Scope, and Substitution}
+
+Substitution with function composition is discussed in this lesson, as the topics of free and bound variables come up when trying to implement function composition for functions that share variable names. Below is the correct formula for $f \circ g$ with $f(x)$ and $g(y)$ restated:
+
+\begin{align}
+f(x) = x + z \\
+g(y) = 2 * y \\
+f \circ g = f(g(y)) \\
+= 2 * y + z
+\end{align}
+
+Because the variable $y$ in $f(x)$ is bound by $f$, it is a different variable than the one passed in by substituting $g(y)$ into $f$. To implement capture avoiding substitution, it is necessary to rename the variable $y$ in $f(x)$ to a different name (I chose $z$ in this case), making it a fresh variable. Therefore, this equation avoids ambiguity by separating variables that do not  hold the same meaning.
+
+Below is a general formula for $f \circ g$ written in Lambda calculus:
+
+\begin{align}
+f \circ g = \lambda x. \text{ } f\text{ } (\lambda y. \text{ } g \text{ } y)
+\end{align}
+
+This formula works for any arbitrary functions $f$ and $g$ where the function $g$ gets applied to the argument $y$ in $g \text{ } y$ and becomes the argument for the function $f$. The result of $f \text{ } (\lambda y. \text{ } g \text{ } y)$ represents the composition of $f$ and $g$.
+
+\subsection{Interpreting Lambda Calculus}
+
+Using the file Interpreter.hs, below is the line by line evaluation of the expression $(\lambda x. \lambda y. x)y$:
+
+\begin{lstlisting}
+-- interpreter steps:
+-- 1. evaluate original statement
+eval (App (Abs (Id "x") (Abs (Id "y") (Var (Id "x")))) (Var (Id "y"))) 
+--                (  i  )  (            e3              ) (     e2     )
+-- 2. find App in eval function 
+-- 3. apply line 10 
+eval (subst (Id "x") eval (Var (Id "y")) (Abs (Id "y")(Var (Id "x"))))
+--            (  i  )       (     e2     ) (           e3            )
+-- 4. eval e2 just equals e2 since it's a variable 
+-- 5. apply line 13  
+eval (subst (Id "x") (Var (Id "y")) (Abs (Id "y")(Var (Id "x"))))
+--            (  id  ) (      s     ) (Abs   id1         e1      )
+--                                    (            e              )
+-- 6. apply line 28 
+-- line 29 
+let f = fresh (Abs (Id "y")(Var (Id "x"))) 
+--                   ( id1 ) (     e1    )
+-- 7. compute fresh with the freshAux function
+    -- compute line 21 
+    fresh = Id . freshAux 
+    -- find freshAux function that matches 
+    -- apply line 19 
+    freshAux (Abs (Id "y") (Var (Id "x"))) = ("y") ++ freshAux (Var (Id "x"))
+--                  ( Id i ) (     e      )    ( i )             (      e      )
+    -- evaluate freshAux (Var (Id "x")) 
+    -- apply line 17 
+    freshAux (Var (Id "x")) = "x" ++ "0"
+--                     ( i )   ( i )
+    -- f = Id "yx0"
+-- line 30
+    e2 = subst (Id "y") f (Var (Id "x"))
+--               (  id1 )   (    e1/e    ) 
+-- 8. evaluate e2 
+    -- apply line 25 (this equation is true because id != id1)
+    subst (Id "y") f (Var (Id "x")) = (Var (Id "x")) 
+--          (  id ) (s) (   id1   )     (    id1    ) 
+    -- e2 = (Var (Id "x")) 
+-- line 31 
+-- 9. compute this line 
+    Abs (Id "yx0") (subst (Id "x") (Var (Id "y")) (Var (Id "x")))
+--                            (  id  ) (      s     ) (     e2      )
+    -- compute subsitution --> apply line 25 (this equation is true because id = id1)
+    subst (Id "x") (Var (Id "y")) (Var (Id "x")) = (Var (Id "y"))
+--          (  id  ) (      s     ) (     id1    )   (      s     )
+    -- evaluate with line 12 
+    Abs (Id "yx0") (Var (Id "y")) 
+    eval Abs (Id "yx0") (Var (Id "y")) = Abs (Id "yx0") (eval (Var (Id "y")))
+--             (   i    ) (      e     )       (   i    )       (      e     ) 
+    -- evaluate eval (e) with line 13 (this equation is true because variables evaluate to themselves)
+    eval ((Var (Id "y"))) = (Var (Id "y"))
+--         (       x      )   (     x      )
+-- final output of the evaluation = \yx0. y = 
+Abs (Id "yx0") (Var (Id "y")) 
+\end{lstlisting}
+
+As for the binders and scope, for Lambda calculus substitutions that follow the form $(\lambda id.e)s$, this equation gets simplified in the code to $subst \text{ } id \text{ } s \text{ } e$. Therefore, for all calculations, $\lambda id$ is the binder and the scope of the binder is $e$. The scope of $s$ and the scope of $\lambda id$ are both $e$. The assignments of scope and binder are based on the pattern matching performed above, where each term assigned to $\lambda id$ and $e$ are the equivalents in each specific function call of $subst$. Below are the solutions for the binders and scope of the specific variables for each call to the function $subst$ in the above calculation: 
+
+\begin{lstlisting}
+-- Step 5 subst calculation:
+subst (Id "x") (Var (Id "y")) (Abs (Id "y")(Var (Id "x"))) 
+-- binder = (Id "x"), scope of binder (bound variable) = (Abs (Id "y")(Var (Id "x"))), free variable = (Var (Id "y")) 
+
+-- Step 7 line 30 subst calculation:
+subst (Id "y") f (Var (Id "x")) 
+-- binder = (Id "y"), scope of binder (bound variable) = (Var (Id "x")), free variable = f
+
+-- Step 9 subst calculation:
+subst (Id "x") (Var (Id "y")) (Var (Id "x"))
+-- binder = (Id "x"), scope of binder (bound variable) = (Var (Id "x")), free variable = (Var (Id "y"))
+\end{lstlisting}
+
 \section{Lessons from the Project}
 
 Recursion is the basis for many of these weekly projects. Understanding in detail how recursion works behind the scenes aids in the implementation of the coded solutions in this report. Recursion is a problem-solving technique that utilizes the call stack to create functions that call other functions, or more simplified versions of themselves, within them. To visualize and fully understand the structure of recursive calls, it is best to draw out the problem as a tree data structure, with each recursive call being a node of the tree. Every time a base case is reached, that node becomes a leaf and then the branches are explored upwards from there, branching off when needed and computing calculations from the bottom up. This is describing depth-first search, in which one branch of the tree is explored all the way until reaching a base case. This process is repeated for the whole tree, usually starting at the left and moving right. Parsing, rewriting strings into trees, is a method of visualizing how a computer executes a certain computation and can be vital in the comprehension of the recursion problems explored in this report. 
@@ -463,6 +562,10 @@ From Week 2's addition to this report, the syntax that displays the example comp
 Additionally, parsing is an important topic in this class, as it is an essential process that machines employ when evaluating most computer code. Computers parse concrete syntax into abstract syntax, which is then evaluated by the virtual machine, using the model of computation. This process is something we will encounter daily as computer programmers. Better understanding how a computer parses and understands the information we give it can make us more efficient programmers. Being able to decipher parse trees given a context-free grammar and examples of its language allows us to better understand how computers process code. BNFC and other types of parser generators define rules that the computer follows when interpreting concrete syntax strings. Approaching computer programs in terms of language and grammar teaches us to interpret programs logically and think of parsing as something that follows strict rules and does not take semantics into account. The way humans read and interpret programs is very different from how computers parse them, and we as programmers have to keep in mind that what the computer sees is taken at face value and evaluated according to the rules we have defined. This teaches us to be explicit and straightforward with how we program, avoiding ambiguity and confusion.
 
 Week 4 gives us an introduction to Lambda calculus and its applications. Lambda calculus is the simplest possible programming language. The syntax may look very different to most programming languages, but it contains all of the same concepts. This allows us to strip back a lot of the syntax and get to the root of the basis of programming languages. To be able to write programs using only variables, abstraction, and application is a good starting point to understand the logic of why computer programs work the way that they do. Using variable binding and substitution for Lambda calculus computations (using the Alpha and Beta rules) teaches us how to rename formal parameters and perform capture avoiding substitution, which are the building blocks of Lambda calculus. In capture avoiding substitution, we rename the formal parameters (bound variables) and then replace that parameter in the body of the function by the argument. Reducing Lambda calculus expressions according to these rules demonstrates how this logic is computed by the machine in its simplification. We are able to better understand how computers interpret code by working step-by-step through these computations and having a foundational understanding of Lambda calculus as a whole. 
+
+The lessons from Week 5 surround the topics of capture avoiding substitution, pattern matching, and implementing Lambda calculus in Haskell code. Capture avoiding substitution contains lessons of free and bound variables. These topics are pertinent in programming, when topics such as static variables and variable scopes becomes important when dealing with overlapping variable names and ambiguous variable updates. In section 6.1, the formula for function composition deals with the scope of variables and the need to rename variables to perform capture avoiding substitution. Some definitions of different types of variables are as follows. A bound variable is one that can be renamed by a fresh variable without resulting in any changes in its meaning. A fresh variable is defined simply as one that has not been used before. Lastly, a free variable is a variable that is not bound by any particular binder. Dealing with the topic of capture avoiding substitution allows us to better understand the meaning and values stored in our variables when we program. It reminds us to create unique variables names and work towards avoiding ambiguity in overlapping namespaces. 
+
+The Lambda calculus interpreter section of Week 5's homework details how the interpreter processes Lambda calculus computations implemented in Haskell. Working step by step through the given exercise taught us not only about Haskell syntax in more detail, but also how computers interpret code. We can better understand the interpretation step of computer program execution knowing how an expression gets decoded and which lines get evaluated. The exercise dealt with pattern matching to decipher what lines get executed when the given expression is evaluated by the interpreter. This is a logical exercise that strengthens our capacity to make sense of which lines of code are visited for any given expression. This can help with error prevention and debugging, as understanding the logic behind what the interpreter executes in a program can allow us to see any potential logic or syntax errors present more easily.  
 
 \section{Conclusion}\label{conclusions}
 
