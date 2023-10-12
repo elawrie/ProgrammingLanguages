@@ -551,6 +551,91 @@ subst (Id "x") (Var (Id "y")) (Var (Id "x"))
 -- binder = (Id "x"), scope of binder (bound variable) = (Var (Id "x")), free variable = (Var (Id "y"))
 \end{lstlisting}
 
+\section{Week 6}
+
+\subsection{Rewriting: Introduction}
+
+Week 6 introduces the topic of ARSs (Abstract Rewriting Systems) and string rewriting. An ARS is made up of a language (a set of words) $A$ and rules $R$ for rewriting strings created withing the language $A$. An ARS is confluent if every branch-off computation (where there can be multiple rules applied to the same string) result in the same computation in a further step. This is to say, every peak of the graph of the ARS evaluation has a valley. An ARS is terminating if it does not consist of infinite computations. Finally, an ARS has unique normal forms if all elements have a unique normal form. This is to say, it is convergent, which means it is confluent and terminating \cite{Ars}. For an ARS to have unique normal forms, it must be confluent and normalizing, that is, every object in the ARS must have at least one normal form \cite{Ars}. Below are a list of seven examples ARSs with pictures:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=1]{img/ExampleARSs.png}
+\end{center}
+\caption{Example ARSs}\label{WS}
+\end{figure}
+
+Below is the table of examples of the 8 possible combinations of ARSs with pictures:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.9]{img/ARSTable.png}
+\end{center}
+\caption{ARS Table}\label{WS}
+\end{figure}
+
+\subsection{String Rewriting Exercises}
+
+This section explores further information on the topic of string rewriting. Below are the answers for the example computation, finishing the work we began in class:
+
+\begin{lstlisting}
+    aa -> a
+    bb -> a
+    ab -> b
+    ba -> b
+\end{lstlisting}
+
+\noindent1. Why does the ARS terminate?
+\\\indent This ARS terminates because it always reduces. There are no cases in which this ARS results in an infinite computation. This ARS is set up to get reduced to either the letter $a$ or $b$. 
+\\
+\\
+2. What are the normal forms?
+\\\indent The normal forms are $a$ and $b$.
+\\
+\\
+3. Is there a string s that reduces to both $a$ and $b$?
+\\\indent No, there are no strings in the ARS that evaluate to both $a$ and $b$ because the rewrite rules do not permit it. This is because the ARS is confluent: any combination of $a$ and $b$ evaluates to either $a$ or $b$; each string has unique normal forms.
+\\
+\\
+4. Show that the ARS is confluent:
+\\\indent This ARS is confluent because every peak in the reduction of a given string in the ARS has a valley that makes every branch in the computation reduce to the same final step. Below is an example of an overlapping critical pair that shows confluence of this ARS: 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{img/ARSExample.png}
+\end{center}
+\caption{Demonstration of Confluence}\label{WS}
+\end{figure}
+
+\noindent5. Replacing $->$ by $=$,  which words become equal?
+\\\indent Given the rewrite rules, $aa = bb$ and $ab = ba$. To generalize this statement, any word with an odd number of $b's$ = $b$ and any word with an even number of $b's$ = $a$.
+\\
+\\
+6. What is the nicest way you can find to characterise which words are equal by one English sentence?
+\\\indent Any words with an even number of $b's$ evaluates to $a$ and words with an odd number of $b's$ evaluates to $b$.
+\\
+\\
+7. Repeat the last item using modular arithmetic:
+\\\indent For any string $s$ in the ARS, $f$ is the frequency of $b's$ in $s$. $f \equiv 0 \text{ }(mod \text{ }2)$ shows if the frequency of $b's$ in $s$ is even or odd. Therefore, this formula written in modular arithmetic is as follows:
+\begin{equation}
+s = 
+\left\{
+    \begin{array}{lr}
+        a, & \text{if } f \equiv 0 \text{ }(mod \text{ }2)\\
+        b, & \text{otherwise}
+    \end{array}
+\right\}
+\end{equation}
+\\
+\\
+8. Which specification does the algorithm implement?
+\\\indent This ARS represents an XOR logic gate, since the truth table of the rewrite rules outputs the same values as the logic for this gate. It determines whether there is an odd or even number of 1's ($b's$) in the original string. Below is an image of these truth tables to visualize their equivalence:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{img/TruthTable.png}
+\end{center}
+\caption{ARS and XOR Truth Table}\label{WS}
+\end{figure}
+
 \section{Lessons from the Project}
 
 Recursion is the basis for many of these weekly projects. Understanding in detail how recursion works behind the scenes aids in the implementation of the coded solutions in this report. Recursion is a problem-solving technique that utilizes the call stack to create functions that call other functions, or more simplified versions of themselves, within them. To visualize and fully understand the structure of recursive calls, it is best to draw out the problem as a tree data structure, with each recursive call being a node of the tree. Every time a base case is reached, that node becomes a leaf and then the branches are explored upwards from there, branching off when needed and computing calculations from the bottom up. This is describing depth-first search, in which one branch of the tree is explored all the way until reaching a base case. This process is repeated for the whole tree, usually starting at the left and moving right. Parsing, rewriting strings into trees, is a method of visualizing how a computer executes a certain computation and can be vital in the comprehension of the recursion problems explored in this report. 
@@ -567,6 +652,18 @@ The lessons from Week 5 surround the topics of capture avoiding substitution, pa
 
 The Lambda calculus interpreter section of Week 5's homework details how the interpreter processes Lambda calculus computations implemented in Haskell. Working step by step through the given exercise taught us not only about Haskell syntax in more detail, but also how computers interpret code. We can better understand the interpretation step of computer program execution knowing how an expression gets decoded and which lines get evaluated. The exercise dealt with pattern matching to decipher what lines get executed when the given expression is evaluated by the interpreter. This is a logical exercise that strengthens our capacity to make sense of which lines of code are visited for any given expression. This can help with error prevention and debugging, as understanding the logic behind what the interpreter executes in a program can allow us to see any potential logic or syntax errors present more easily.  
 
+Week 6 taught us about Abstract Rewriting Systems. ARSs come with various classifications and elements. The topics of confluence, termination, and having unique normal forms were previously discussed. Evaluating ARSs for these qualities allows us to classify ARSs and better understand their behavior. Knowledge of ARSs can assist us in understanding Finite State Machines (FSMs) and automatons, since ARSs are simply unlabeled state transition systems \cite{Ars}. Since these are core topics in the fields of programming languages and algorithm analysis, they can assist with the comprehension of this field of computer science and logic. Here are a few other definitions that relate to ARSs that are key takeaways from this lesson and further our understanding of the topic:
+\\\noindent 1. Equivalence:
+\\\indent $a$ and $b$ are equivalente if $a \equiv b$, where $\equiv$ is the reflexive, symmetric, and transitive closure of the reduction arrow function $->$.
+\\\noindent 2. Reduction:
+\\\indent $a$ is reducible if if there is a $b$ such that $a -> b$.
+\\\noindent 3. Normal Forms:
+\\\indent $a$ is a normal form if $a$ is irreducible. Additionally, $b$ is a normal form of $a$ if $a$ reduces to $b$ and $b$ is a normal form. 
+\\\noindent 4. Joinablity:
+\\\indent $a$ and $b$ are joinable if they reduce to the same element.
+\\\noindent 5. Local Confluence:
+\\\indent For all $b$ and $c$ that are the outputs of two different rewrite rules in one given reduction step, the ARS is locally confluent if $b$ and $c$ are joinable. As well, if the ARS is terminating, local confluence implies confluence. 
+\\\indent These definitions allow us to evaluate ARSs and the logic associated with them. Simplifying expressions of this type brings us back to topics such as reduction and simplification that we learned in high school algebra. Although this lesson implements these themes in a more structured way, we as students have been performing simplification in mathematics for years. These lessons strengthen our abilities to use logic and mathematical vocabulary, which we can apply to projects in our classes, future careers, and personal lives. 
 \section{Conclusion}\label{conclusions}
 
 This report details various logical problems and their solutions implemented throughout this semester. As illustrated in this report, these algorithms can be approached in various different ways. Exploring different approaches to the same problem hones the skill set of novel solution creation, which allows programmers to complete tasks by thinking outside of the box in ways that seem less than straightforward. The thought processes behind the solutions to these problems can be applied to technical interviews, future computer science courses, and projects assigned in the workplace within the field of computer programming. The problem-solving techniques developed in this class and through this report serve as a basis of knowledge to assist students with our future endeavours. 
@@ -575,6 +672,7 @@ This report details various logical problems and their solutions implemented thr
 \bibitem[LTX]{Ltx} \href{https://latex-tutorial.com/piecewise-functions-latex/}{Cases and piecewise functions in LaTex}, LaTex-Tutorial.com, 2023.
 \bibitem[GCD]{Gcd} Alexander Kurz, \href{https://www.youtube.com/watch?v=ZcJMj0antos}{gcd and Euclid's algorithm}, YouTube, 2020.
 \bibitem[WIK]{Wik} \href{https://en.wikipedia.org/wiki/Tower_of_Hanoi}{Tower of Hanoi}, Wikipedia, 2023.
+\bibitem[ARS]{Ars}\href{https://en.wikipedia.org/wiki/Abstract_rewriting_system#:~:text=In%20a%20convergent%20ARS%2C%20every,if%20it%20is%20locally%20confluent.}{Abstract rewriting system}, Wikipedia, 2023.
 \end{thebibliography}
 
 \end{document}
