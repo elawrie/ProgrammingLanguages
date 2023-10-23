@@ -636,6 +636,44 @@ s =
 \caption{ARS and XOR Truth Table}\label{WS}
 \end{figure}
 
+\section{Week 7}
+
+\begin{lstlisting}
+Given the following rewrite rules:
+
+    ab -> cc
+    ac -> bb
+    bc -> aa
+
+and starting from 15 a's, 14 b's and 13 c's, is it possible to reach a configuration in which there are only a's or only b's or only c's?
+
+Example calculations: 
+
+    letters:                                   counts (parities):
+    aaaaaaaaaaaaaaabbbbbbbbbbbbbbccccccccccccc 15,14,13
+    accccccccccccccccccccccccccccccccccccccccc 1,0,41
+    bbcccccccccccccccccccccccccccccccccccccccc 0,2,40
+    baaccccccccccccccccccccccccccccccccccccccc 2,1,39
+    ccaccccccccccccccccccccccccccccccccccccccc 1,0,41
+    ccbbcccccccccccccccccccccccccccccccccccccc 0,2,40
+    ...
+
+    aabbcc 2,2,2
+    accbcc 1,1,4
+    bbcbcc 0,3,3
+    baabcc 2,2,2
+    ccabcc 1,1,4
+    cbbbcc 0,3,3
+    aaccbb 2,2,2
+    ...
+
+Invariant: 
+
+    Two (or more) parities (counts) are always matching (even or odd) in each calculation step.
+\end{lstlisting}
+
+Based on the above calculations, reducing 15 a's, 14 b's, and 13 c's never allows for the possibility of reducing to a string with only a's, b's or c's. This is due to the invariant described above: two or more letters' parities are always either even or odd.
+
 \section{Lessons from the Project}
 
 Recursion is the basis for many of these weekly projects. Understanding in detail how recursion works behind the scenes aids in the implementation of the coded solutions in this report. Recursion is a problem-solving technique that utilizes the call stack to create functions that call other functions, or more simplified versions of themselves, within them. To visualize and fully understand the structure of recursive calls, it is best to draw out the problem as a tree data structure, with each recursive call being a node of the tree. Every time a base case is reached, that node becomes a leaf and then the branches are explored upwards from there, branching off when needed and computing calculations from the bottom up. This is describing depth-first search, in which one branch of the tree is explored all the way until reaching a base case. This process is repeated for the whole tree, usually starting at the left and moving right. Parsing, rewriting strings into trees, is a method of visualizing how a computer executes a certain computation and can be vital in the comprehension of the recursion problems explored in this report. 
@@ -664,6 +702,17 @@ Week 6 taught us about Abstract Rewriting Systems. ARSs come with various classi
 \\\noindent 5. Local Confluence:
 \\\indent For all $b$ and $c$ that are the outputs of two different rewrite rules in one given reduction step, the ARS is locally confluent if $b$ and $c$ are joinable. As well, if the ARS is terminating, local confluence implies confluence. 
 \\\indent These definitions allow us to evaluate ARSs and the logic associated with them. Simplifying expressions of this type brings us back to topics such as reduction and simplification that we learned in high school algebra. Although this lesson implements these themes in a more structured way, we as students have been performing simplification in mathematics for years. These lessons strengthen our abilities to use logic and mathematical vocabulary, which we can apply to projects in our classes, future careers, and personal lives. 
+
+Week 7 dealt with invariants, which is a common topic in dealing with ARSs. We define invariants by thinking about what doesn't change in every step of an ARS's calculations. This is formally defined as: 
+\begin{lstlisting}
+P: A -> B is invariant of (A, ->) if P(A) = P(B) 
+\end{lstlisting}
+where change is defined as: 
+\begin{lstlisting}
+all a, b within A where a -> b.
+\end{lstlisting}
+This can allow us to better understand the behavior of ARS rewrite rules and further how to evaluate strings based on their criteria. Invariants help us find patterns in ARS  calculations that strengthen our logic processes. Invariants in hold a profound significance as they provide a stable foundation upon which to understand and analyze dynamic processes in various domains, from computer science to mathematics and beyond. These invariants are essential because they encapsulate characteristics that remain unchanged throughout an ARS's evolution. In a broader context, the study of invariants teaches us an important lesson about the fundamental principles governing change and transformation. By identifying and preserving these invariants, we gain insight into the underlying structures and symmetries that persist amidst complexity. This, in turn, deepens our understanding of not only ARSs but also real-world phenomena, enabling us to make predictions, ensure correctness, and design more efficient algorithms and systems. 
+
 \section{Conclusion}\label{conclusions}
 
 This report details various logical problems and their solutions implemented throughout this semester. As illustrated in this report, these algorithms can be approached in various different ways. Exploring different approaches to the same problem hones the skill set of novel solution creation, which allows programmers to complete tasks by thinking outside of the box in ways that seem less than straightforward. The thought processes behind the solutions to these problems can be applied to technical interviews, future computer science courses, and projects assigned in the workplace within the field of computer programming. The problem-solving techniques developed in this class and through this report serve as a basis of knowledge to assist students with our future endeavours. 
