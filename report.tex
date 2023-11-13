@@ -694,6 +694,30 @@ The Energy Symbolic Regression project presents a novel approach to symbolic reg
 
 As for my feedback on the peer review process as a whole, I found that in this format it does not yield the expected benefits or contribute substantially to the quality of the work of our projects. This is because we already had opportunities to give feedback on other projects in previous discussion posts, and having the projects assigned to us to review creates more confusion when the projects don't exactly line up with domain expertise. I see that there is a correlation between each of the groups' topics and I understand that every project needs reviewing, and it is good practice to work with GitHub issues and pull requests. I just personally feel that the peer review process could have been structured in a way that was more beneficial to us. It would have been better if we could have had one week to solely explore a repository, raise issues, and correct our issues. Then, another week could have been making the pull request and adding functionality. Having just one week to perform all of these tasks did not give any time for the other group to fix our issues before the deadline to submit a pull request. Also, it was difficult getting assigned a project that did not use Blockly, as the learning curve hindered our ability to thoughtfully contribute to the project. Overall, I believe that it would have been more beneficial for us to have used these weeks to continue adding functionality to build out the implementation of our project, since we have had previous peer review opportunities in this class and it felt as though we did not have ample time to make significant improvements to each other's projects. 
 
+\section{Week 10}
+
+\subsection{Blockly Prisoner's Dilemma}
+
+1. Use the debugger to step through the code and explain what happens? \\
+
+Initially, both participants must undergo registration to ensure the proper functioning of the game, with both individuals operating within the same port. Following this, they configure their block codes, ideally featuring an initial move (possibly a second move) and subsequent moves that may be contingent on the preceding ones. Alternatively, the moves can consistently be either defect or cooperate. Subsequently, once both players' codes update the program's value dictionary, it progresses through five rounds, evaluating who defected and who cooperated based on the specified logic. Additionally, a one-second interval timer continuously prints on the console until the second player makes their move. \\
+
+\noindent2. Under which conditions do both players get the result of the game? \\
+
+Both players receive the game result when both employ strategies such as always defect or always cooperate. However, when conditionals are present, and a player's move depends on the other player's last move, a conclusive output may not always be obtained.\\
+
+\noindent3. Why can it happen that only the second player gets the result?\\
+
+This occurs when the first player has executed their move, but the second player has not yet made their move. Consequently, only the second player receives the result, as the computation takes both players' moves into account.\\
+
+\noindent4. What would be a way to improve on this?\\
+
+An improvement could be achieved by notifying one player that the other has made a move. Alternatively, a message could be sent indicating that a player has exited the game. This would provide clarity, ensuring that the participant is aware of the other player's involvement rather than leaving them uncertain about being the first to make a move or questioning whether the other person has exited.\\
+
+\noindent5. Describe how you used the debugger and what you learned from it:\\
+
+I employed the debugger to inspect the backend processes via terminal input, enabling me to confirm the information exchanged between players. Witnessing the modularity and logic of the program operating in the back-end provided valuable lessons. Learning how to use a debugger is applicable for software development and future coding projects we implement. 
+
 \section{Lessons from the Project}
 
 Recursion is the basis for many of these weekly projects. Understanding in detail how recursion works behind the scenes aids in the implementation of the coded solutions in this report. Recursion is a problem-solving technique that utilizes the call stack to create functions that call other functions, or more simplified versions of themselves, within them. To visualize and fully understand the structure of recursive calls, it is best to draw out the problem as a tree data structure, with each recursive call being a node of the tree. Every time a base case is reached, that node becomes a leaf and then the branches are explored upwards from there, branching off when needed and computing calculations from the bottom up. This is describing depth-first search, in which one branch of the tree is explored all the way until reaching a base case. This process is repeated for the whole tree, usually starting at the left and moving right. Parsing, rewriting strings into trees, is a method of visualizing how a computer executes a certain computation and can be vital in the comprehension of the recursion problems explored in this report. 
@@ -732,6 +756,8 @@ where change is defined as:
 all a, b within A where a -> b.
 \end{lstlisting}
 This can allow us to better understand the behavior of ARS rewrite rules and further how to evaluate strings based on their criteria. Invariants help us find patterns in ARS  calculations that strengthen our logic processes. Invariants in hold a profound significance as they provide a stable foundation upon which to understand and analyze dynamic processes in various domains, from computer science to mathematics and beyond. These invariants are essential because they encapsulate characteristics that remain unchanged throughout an ARS's evolution. In a broader context, the study of invariants teaches us an important lesson about the fundamental principles governing change and transformation. By identifying and preserving these invariants, we gain insight into the underlying structures and symmetries that persist amidst complexity. This, in turn, deepens our understanding of not only ARSs but also real-world phenomena, enabling us to make predictions, ensure correctness, and design more efficient algorithms and systems. 
+
+Week 10 dealt with using a debugger in VSCode to evaluate the Blockly Prisoner's Dilemma project. Typically, the Prisoner's Dilemma project is introduced solely from an economic or political science perspective, but delving into its technical aspects revealed a different layer of understanding. Getting to see how this problem works behind the scenes teaches us about a complex situation and how to evaluate it using code. Especially implementing it using Blockly gives us a beginner friendly functionality to teach us as well as any potential users about the logic of this problem. This was also the first time I had used a debugger, which is a useful tool in VSCode. Getting to see how this program works behind the scenes and line-by-line how the computer executes it gives us useful insights on how this program works. We can apply this debugger tool to our future projects as it can help us diagnose issues more systematically and approach debugging in a detail-oriented way.
 
 \section{Conclusion}\label{conclusions}
 
